@@ -5,11 +5,10 @@ for (i in 2:100) {
     if (i %% j == 0) {
       x <- x + 1
     } else{
-      
+
     }
   }
   if (x <= 2) {
-    print(i)
+    head(i)
   }
 }
- 
