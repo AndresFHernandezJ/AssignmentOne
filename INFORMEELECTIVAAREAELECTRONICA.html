@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Nikolas Riapira" />
+<meta name="author" content="Santiago Avila, Andres Hernandez, Andres Montenegro, Brayan Zambrano, Nikolas Riapira" />
 
-<meta name="date" content="2023-02-23" />
+<meta name="date" content="2023-02-25" />
 
-<title>Informe_Programacion_en_Rstudio</title>
+<title>Informe Programacion en Rstudio</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1621,15 +1621,16 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Informe_Programacion_en_Rstudio</h1>
-<h4 class="author">Nikolas Riapira</h4>
-<h4 class="date">2023-02-23</h4>
+<h1 class="title toc-ignore">Informe Programacion en Rstudio</h1>
+<h4 class="author">Santiago Avila, Andres Hernandez, Andres Montenegro,
+Brayan Zambrano, Nikolas Riapira</h4>
+<h4 class="date">2023-02-25</h4>
 
 </div>
 
 
-<div id="informe--electiva-area-electronica" class="section level2">
-<h2>INFORME- ELECTIVA AREA ELECTRONICA</h2>
+<div id="informe---electiva-area-electronica" class="section level2">
+<h2>INFORME - ELECTIVA AREA ELECTRONICA</h2>
 </div>
 <div id="código-básico-en-r" class="section level2">
 <h2>1. Código básico en R</h2>
@@ -1789,15 +1790,14 @@ view(Delayed1H2)</code></pre>
 view(Midnight_to_6am2)</code></pre>
 </div>
 <div id="ejercicios-select-any_of" class="section level3">
-<h3><strong><em>5.4.1 Ejercicios (select() ;
-any_of())</em></strong></h3>
+<h3>5.4.1 Ejercicios (select() ; any_of())</h3>
 <p><strong><em>Item 2:</em></strong> ¿Qué sucede si incluye el nombre de
 una variable varias veces en una funcion select()?</p>
-<pre class="r"><code>     library(tidyverse)
-     library(nycflights13)
-    x &lt;- flights %&gt;%
-      select(distance, distance, distance, distance, distance)
-      view(x)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(nycflights13)
+x &lt;- flights %&gt;%
+  select(distance, distance, distance, distance, distance)
+view(x)</code></pre>
 <p>Respuesta: Al ejecutar el anterior codigo se puede observar que el
 resultado es un data-frame donde la variable distancia aparece con todos
 sus valores como una unica columna, no importa cuantas veces se escriba
@@ -1891,6 +1891,349 @@ bien cumple con el objetivo el codigo de la parte superior, como se dijo
 anteriormente este no seria muy eficaz si se tiene un dataset con muchas
 columnas que necesiten ser filtradas; situacion que por otro lado con la
 sentencia “contains()” solo tomaria una linea de codigo.</p>
+<pre class="r"><code>  library(readr)
+  library(dplyr)
+  library(tidyverse)
+
+  myData &lt;- nycflights13::flights</code></pre>
+</div>
+<div id="ejercicios" class="section level3">
+<h3>5.6.7 Ejercicios</h3>
+<p><strong>1)</strong> Haga una lluvia de ideas sobre al menos 5 formas
+diferentes de evaluar las características típicas de retraso de un grupo
+de vuelos. Considerelos siguientes escenarios.</p>
+<p><strong><em>Item 1:</em></strong> Un vuelo llega 15 minutos antes el
+50% del tiempo y 15 minutos tarde el 50% del tiempo.</p>
+<p>-Vuelos con llegada 15 minutos antes</p>
+<pre class="r"><code>library(knitr)
+ANTES &lt;- myData%&gt;% 
+  filter (arr_delay== (-15))
+#kable(head(ANTES))</code></pre>
+<p>-Vuelos con llegada 15 minutos despues</p>
+<pre class="r"><code>DESPUES &lt;- myData%&gt;% 
+  filter (arr_delay== 15)</code></pre>
+<p>-tiempo de vuelo de 30 minutos</p>
+<pre class="r"><code>MITAD_TIEMPO &lt;- myData%&gt;% 
+  filter (air_time&lt;=30)</code></pre>
+<p>-combinacion 15 minutos antes de llegada con 30 minutos de vuelo</p>
+<pre class="r"><code>ANTES_MITAD_TIEMPO&lt;- myData%&gt;% 
+  select( carrier,flight, tailnum, origin , dest,arr_delay,air_time)%&gt;%
+  filter (arr_delay== (-15),air_time==30)
+kable(head(ANTES_MITAD_TIEMPO))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">carrier</th>
+<th align="right">flight</th>
+<th align="left">tailnum</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">arr_delay</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">EV</td>
+<td align="right">4309</td>
+<td align="left">N12922</td>
+<td align="left">EWR</td>
+<td align="left">ALB</td>
+<td align="right">-15</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">US</td>
+<td align="right">2126</td>
+<td align="left">N957UW</td>
+<td align="left">LGA</td>
+<td align="left">BOS</td>
+<td align="right">-15</td>
+<td align="right">30</td>
+</tr>
+<tr class="odd">
+<td align="left">9E</td>
+<td align="right">2946</td>
+<td align="left">N8672A</td>
+<td align="left">JFK</td>
+<td align="left">PHL</td>
+<td align="right">-15</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">EV</td>
+<td align="right">3807</td>
+<td align="left">N14568</td>
+<td align="left">EWR</td>
+<td align="left">PVD</td>
+<td align="right">-15</td>
+<td align="right">30</td>
+</tr>
+<tr class="odd">
+<td align="left">US</td>
+<td align="right">1911</td>
+<td align="left">N955UW</td>
+<td align="left">LGA</td>
+<td align="left">PHL</td>
+<td align="right">-15</td>
+<td align="right">30</td>
+</tr>
+</tbody>
+</table>
+<p>-combinacion 15 minutos despues de llegada con 30 minutos de
+vuelo</p>
+<pre class="r"><code>DESPUES_MITAD_TIEMPO&lt;- myData%&gt;% 
+  select( carrier,flight, tailnum, origin , dest,arr_delay,air_time)%&gt;%
+  filter (arr_delay== (15),air_time==30)
+kable(head(DESPUES_MITAD_TIEMPO))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">carrier</th>
+<th align="right">flight</th>
+<th align="left">tailnum</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">arr_delay</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">EV</td>
+<td align="right">4404</td>
+<td align="left">N17196</td>
+<td align="left">EWR</td>
+<td align="left">PVD</td>
+<td align="right">15</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">EV</td>
+<td align="right">4404</td>
+<td align="left">N14905</td>
+<td align="left">EWR</td>
+<td align="left">PVD</td>
+<td align="right">15</td>
+<td align="right">30</td>
+</tr>
+<tr class="odd">
+<td align="left">EV</td>
+<td align="right">4125</td>
+<td align="left">N14204</td>
+<td align="left">EWR</td>
+<td align="left">ALB</td>
+<td align="right">15</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">US</td>
+<td align="right">2055</td>
+<td align="left">N713UW</td>
+<td align="left">LGA</td>
+<td align="left">PHL</td>
+<td align="right">15</td>
+<td align="right">30</td>
+</tr>
+</tbody>
+</table>
+<p><strong><em>Item 2:</em></strong> Un vuelo siempre llega 10 minutos
+tarde.</p>
+<pre class="r"><code>SIEMPRE_TARDE &lt;- myData%&gt;% 
+  filter (arr_delay== 10)</code></pre>
+<p><strong><em>Item 3:</em></strong> Un vuelo llega 30 minutos antes el
+50% del tiempo y 30 minutos tarde el 50% del tiempo.</p>
+<p>-Vuelos con llegada 30 minutos antes</p>
+<pre class="r"><code>ANTES_30 &lt;- myData%&gt;% 
+  filter (arr_delay== (-30))</code></pre>
+<p>-Vuelos con llegada 30 minutos despues</p>
+<pre class="r"><code>DESPUES_30 &lt;- myData%&gt;% 
+  filter (arr_delay== 30)</code></pre>
+<p>-tiempo de vuelo de 60 minutos</p>
+<pre class="r"><code>MITAD_TIEMPO_60 &lt;- myData%&gt;% 
+  filter (air_time&lt;=60)</code></pre>
+<p>-combinacion 30 minutos antes de llegada con 60 minutos de vuelo</p>
+<pre class="r"><code>ANTES_MITAD_30_TIEMPO_60&lt;- myData%&gt;% 
+  select( carrier,flight, tailnum, origin , dest,arr_delay,air_time)%&gt;%
+  filter (arr_delay== (-30),air_time==60)
+  kable(head(ANTES_MITAD_30_TIEMPO_60))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">carrier</th>
+<th align="right">flight</th>
+<th align="left">tailnum</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">arr_delay</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">EV</td>
+<td align="right">5378</td>
+<td align="left">N716EV</td>
+<td align="left">LGA</td>
+<td align="left">PIT</td>
+<td align="right">-30</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">9E</td>
+<td align="right">3320</td>
+<td align="left">N935XJ</td>
+<td align="left">JFK</td>
+<td align="left">BUF</td>
+<td align="right">-30</td>
+<td align="right">60</td>
+</tr>
+<tr class="odd">
+<td align="left">DL</td>
+<td align="right">1235</td>
+<td align="left">N315NB</td>
+<td align="left">LGA</td>
+<td align="left">PIT</td>
+<td align="right">-30</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">DL</td>
+<td align="right">1129</td>
+<td align="left">N301NB</td>
+<td align="left">LGA</td>
+<td align="left">PIT</td>
+<td align="right">-30</td>
+<td align="right">60</td>
+</tr>
+<tr class="odd">
+<td align="left">9E</td>
+<td align="right">3455</td>
+<td align="left">N919XJ</td>
+<td align="left">JFK</td>
+<td align="left">PIT</td>
+<td align="right">-30</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">B6</td>
+<td align="right">6</td>
+<td align="left">N304JB</td>
+<td align="left">JFK</td>
+<td align="left">BUF</td>
+<td align="right">-30</td>
+<td align="right">60</td>
+</tr>
+</tbody>
+</table>
+<p>-combinacion 30 minutos despues de llegada con 60 minutos de
+vuelo</p>
+<pre class="r"><code>DESPUES_MITAD_30_TIEMPO_60&lt;- myData%&gt;% 
+  select( carrier,flight, tailnum, origin , dest,arr_delay,air_time)%&gt;%
+  filter (arr_delay== (30),air_time==60)
+  kable(head(DESPUES_MITAD_30_TIEMPO_60))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">carrier</th>
+<th align="right">flight</th>
+<th align="left">tailnum</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">arr_delay</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">9E</td>
+<td align="right">3846</td>
+<td align="left">N8894A</td>
+<td align="left">JFK</td>
+<td align="left">ORF</td>
+<td align="right">30</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">9E</td>
+<td align="right">2906</td>
+<td align="left">N604LR</td>
+<td align="left">JFK</td>
+<td align="left">BUF</td>
+<td align="right">30</td>
+<td align="right">60</td>
+</tr>
+<tr class="odd">
+<td align="left">MQ</td>
+<td align="right">4418</td>
+<td align="left">N852MQ</td>
+<td align="left">JFK</td>
+<td align="left">DCA</td>
+<td align="right">30</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">UA</td>
+<td align="right">1638</td>
+<td align="left">N36247</td>
+<td align="left">EWR</td>
+<td align="left">CLE</td>
+<td align="right">30</td>
+<td align="right">60</td>
+</tr>
+</tbody>
+</table>
+<p><strong><em>Item 4:</em></strong> El 99% de las veces un vuelo es
+puntual. El 1% de las veces llega 2 horas tarde.</p>
+<pre><code>-vuelos puntuales aproximadamente el 99% del total menos a 120 min</code></pre>
+<pre class="r"><code>PUNTUAL &lt;- myData %&gt;% 
+  filter(arr_delay&lt; 120)</code></pre>
+<p>-vuelos que llegan 2 horas o mas tarde aproximadamente El 1% ddel
+total</p>
+<pre class="r"><code>DOS_HORAS_TARDE &lt;- myData %&gt;% 
+  filter(arr_delay&gt;= 120)</code></pre>
+</div>
+<div id="qué-es-más-importante-el-retraso-en-la-llegada-o-el-retraso-en-la-salida" class="section level3">
+<h3>¿Qué es más importante: el retraso en la llegada o el retraso en la
+salida?</h3>
+<p>Consideramos que si sabemos la hora de salida del vuelo y hay un
+retraso de llegada según la hora programada puede generar incertidumbre
+ya que pudo haber pasado algo en el vuelo o en la logística de trasporte
+aéreo. Si embargo un retraso en la salida genera molestias para el
+usuario, pero no hay inseguridad para él, por tal motivo es más
+importante el retraso en la llegada que en la salida en termino de
+seguridad para quien usan el servicio y sus servidores.</p>
+</div>
+<div id="ejercicio" class="section level3">
+<h3>5.7.1 Ejercicio</h3>
+<p><strong>2)</strong> ¿Qué avión (tailnum) tiene el peor récord de
+puntualidad?</p>
+<pre class="r"><code>RECORD_INPUNTUAL &lt;- myData %&gt;% 
+select( carrier,flight, tailnum, origin , dest,arr_delay)%&gt;%
+  filter(arr_delay&gt;1200)
+kable(head(RECORD_INPUNTUAL))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">carrier</th>
+<th align="right">flight</th>
+<th align="left">tailnum</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">arr_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HA</td>
+<td align="right">51</td>
+<td align="left">N384HA</td>
+<td align="left">JFK</td>
+<td align="left">HNL</td>
+<td align="right">1272</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="reporting-with-rmarkdown" class="section level2">
@@ -1957,9 +2300,8 @@ para, en este caso usarla en mas operaciones como lo son el any_of() o
 simplemente para mostrar esa variable independientemente del resto que
 se encuentra en el dataset correspondiente.</p>
 <p><strong><em>Ejemplo:</em></strong></p>
-<pre class="r"><code>library(tidyverse)
-example &lt;- starwars%&gt;%
-select(name,height,mass,skin_color)
+<pre class="r"><code>example &lt;- starwars %&gt;%
+  select(name, height, mass, skin_color)
 head(example)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -1971,6 +2313,11 @@ cual se le asigna la variable de nombre “example” para posteriormente
 visualizar los datos de nombre, altura, masa y color de piel; en este
 caso solo se busca separa variables o distinguir estas del resto y
 visualizar las cuatro columnas en una grafica diferente.</p>
+<p>Respecto al chunk “error”, puede decirse que al haber un error debajo
+de el este se visualiza en la parte inferior del codigo en una linea en
+caso de estar en true y del chunk “echo” si este esta en true lo que
+este en ese espacio (codigo) no se vera en el posterior archivo
+previsualizado.</p>
 </div>
 </div>
 
