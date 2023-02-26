@@ -67,7 +67,6 @@ library(nycflights13)
 
 A continuación se presentan los ejercicios básicos para la utilización de la función filter()
 
-
 ***Item 1:*** Tuvieron un retraso de llegada de dos o mas horas
 
 ```{r}
@@ -77,7 +76,6 @@ View(Arrival_Delay)
 ```
 
 Lo que genera la tabla flights unicamente con los vuelos con un retraso de llegada mayor a 120 minutos.
-
 
 ***Item 2:*** Volaron a Houston
 
@@ -204,6 +202,89 @@ Midnight_to_6am2 <- flights %>%
 view(Midnight_to_6am2)
 ```
 
+### 5.3.1 Ejercicios (arrange()+is.na())
+
+***Item 1:*** ¿Como se podria utilizar la funcion arrange() para clasificar los valores vacios al inicio(Pista: Utilice la funcion is.na())?
+
+```{r}
+# Cargar la librería dplyr
+library(dplyr)
+
+# Ordenar los valores faltantes al principio del marco de datos starwars
+starwars_ordenado <- arrange(starwars,desc(is.na(mass)))
+
+# Ver el marco de datos ordenado
+head(starwars_ordenado)
+View(starwars_ordenado)
+
+```
+
+**Desarrollo:** La funcion arrange por defecto, no genera nuevas tablas en un arreglo, sino toma datos ya existentes, ordenandolos de acuerdo a la sentencia del usuario, incluido la funcion donde los valores vacios (NA), se situan siempre debajo de la clasificacion de datos, para realizar lo contrario, se inspecciona la funcion is.na(), que examina los valores de un arreglo para hallar los valores vacios, donde por cada valor vacio encontrado, generara una respuesta de salida de tipo booleano si llega a ser verdadera o falsa la sentencia (Si x=NA =TRUE)(SI x != NA FALSE), en este caso, se toma el data frame starwars en la categoria masa, se examina si en los datos existe valores de tipo NA, se situa el valor de clasificacion de mayor a menor mediante la sentencia desc para mostrar los valores de tipo TRUE por encima de los FALSE, correspondientes a los valores de tipo NA en la parte superior de la tabla, y el restante de los valores diferentes de NA situados al final de la tabla, cabe resaltar que esta clasificacion es realizada unicamente para discriminar valores de tipo TRUE y FALSE consignados en la tabla, mas no ordena los valores numericos en un orden en especifico, cabe mencionar que la funcion head, esta encargada unicamente de desplegar los primeros datos de la tabla en el monitor de compilación
+
+***Item 2:*** Clasifique de el dataframe Flights los vuelos mas retrasados, de tal modo de querer observar cuales se retrasaron mas y cuales salieron antes de tiempo
+
+```{r}
+#Se incluye la libreria dplyr
+library(dplyr)
+#Se incluye el dataframe nycflights2013
+library(nycflights13)
+
+#Se almacena en flight_most_delayed la clasificacion de vuelos con mayor retraso de manera descendente (Mayor a menor)
+flight_most_delayed <- arrange(flights,desc(dep_delay))
+#Se almacena en flight_most_delayed la clasificacion de vuelos con menor retraso de manera ascendente (Menor a mayor)
+flight_leftearliest <- arrange(flights,dep_delay)
+#Se desea observar los primeros datos de la lista y desplegar en una pestaña la vista de la tabla
+head(flight_most_delayed)
+head(flight_leftearliest)
+
+
+```
+
+**Desarrollo:** Empleando la funcion arrange() en el dataset flights, en la categoria dep_delay (deploy delay), Se empleo en primera medida para hallar los vuelos con mayor retardo mediante la sentencia arrange(flights,desc(dep_delay)) donde se muestran en primer encabezado los vuelos con mayor retardo de despegue, por el contrario al desear visualizar los de menor retardo se implementa igualmente la funcion arrange(), solo que en este caso es utlizado para mostrar los vuelos con menor retraso, cabe resaltar que los vuelos con valores negativos hacen referencia que los vuelon salieron dicha cantida de minutos antes de la hora de vuelo establecida
+
+***Item 3:*** Clasifique los vuelos con mayor velocidad de vuelo
+
+```{r}
+#Cargar la libreria dplyr+
+library(dplyr)
+#Cargar la libreria nyc flights para obtener datos de vuelo
+library(nycflights13)
+
+#Se asigna los datos de arrange de velocidad a flights, calculando la velocidad=distancia/tiempo
+flights <- mutate(flights,speed = distance /air_time*60)
+#Se selecciona la categoria speed 
+select(flights,speed)
+#Se asigna el orden de mayor a menor de velocidad a flights
+flights <- arrange(flights,desc(speed))
+#Se despliegan los primeros valores de flights
+head(flights)
+View(flights)
+```
+
+**Desarrollo:** Empleando multiples variables para implementar el ejercicio, se asigna al mismo conjunto de datos flights la operacion mutate() para crear una nueva variable, equivalente al cociente entre la distancia de vuelo de los aviones, y el tiempo de vuelo de estos (el tiempo es expresado en minutos, por lo que es necesario multiplicar el valor por 60 para realizar conversion en segundos), despues se selecciona mediante select() la nueva categoria velocidad, para finalmente aplicar a flights, la clasificacion de los vuelos mas veloces en el encabezado mediante un ordenamiento de mayor a menor con arrange(flights, desc(speed))
+
+***Item 4:*** Cuales vuelos recorrieron la mayor distancia, y cuales viajaron la menor
+
+```{r}
+#Cargar la libreria dplyr
+library(dplyr)
+#Cargar la libreria nyc flights para obtener datos de vuelo
+library(nycflights13)
+#Se asigna los datos de arrange de mayor distancia a flights farthest
+flights_farthest <- arrange(flights,desc(distance))
+#Se asigna los datos de arrange de menor distancia a shortest
+flights_shortest <- arrange(flights,distance)
+#Se asigna los head(primero datos) en la salida
+head(flights_farthest)
+#Se asigna los head(primero datos) en la salida
+head(flights_shortest)
+#Se asigna los head(primero datos) en la salida
+View(flights_farthest)
+#Se asigna los head(primero datos) en la salida
+View(flights_shortest)
+```
+
+**Desarrollo:** Al igual que el item planteado previamente, se realiza uso de la funcion arrange() nuevamente para clasificar de mayor a menor, los vuelos con mayor distancia recorrida, mediante la funcion arrange(flights, desc(distance)), reasignandose a la variable creada flights_fartherst, y mediante una clasificacion contraria (menor a manor), se asigna a la variable flights_shortest los vuelos con menor recorrido de distancia, mediante la funcion arrange(flights, distance)
 
 ### 5.4.1 Ejercicios (select() ; any_of())
 
@@ -229,9 +310,9 @@ w <- flights %>%
 view(w)
 
 #hide the variable
-w <- flights %>%
+u <- flights %>%
   select(-any_of("distance"))
-view(w)
+view(u)
 
 #3.1) Why might it be helpful in conjunction with this vector?
 
@@ -245,9 +326,9 @@ vars <- c("year", "month", "day", "dep_delay", "arr_delay", "carrier")
   
 #Hide the variables
   
-  z <- flights %>%
+  f <- flights %>%
     select(-any_of(vars))
-  view(z)
+  view(f)
   
 ```
 
@@ -299,8 +380,6 @@ Respuesta: En esta forma predeterminada la sentencia "contains("TIME")" es muy u
 
 Respuesta: Se interpreto que usando la sentencia de "any_of()" podria darse un resultado igual al que se obtiene con "contains()" aunque si bien cumple con el objetivo el codigo de la parte superior, como se dijo anteriormente este no seria muy eficaz si se tiene un dataset con muchas columnas que necesiten ser filtradas; situacion que por otro lado con la sentencia "contains()" solo tomaria una linea de codigo.
 
-
-
 ```{r}
   library(readr)
   library(dplyr)
@@ -309,17 +388,45 @@ Respuesta: Se interpreto que usando la sentencia de "any_of()" podria darse un r
   myData <- nycflights13::flights
 ```
 
+### 5.5.2 Ejercicos (mutate()+functions)
 
-### 5.6.7 Ejercicios 
+***Item 1:*** Las categorias deploy time y scheduled deploy time se encuentran en formato de tipo horario, lo cual las hace sencillas de interpretar analiticamente, pero no de forma computacional, conviertalos a minutos desde la medianoche
+
+```{r}
+library(dplyr)
+library(nycflights13)
+
+flights_enminutos <- mutate(flights,dep_time_minutos=(dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,sched_dep_time_minutos=(sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440)
 
 
-**1)**  Haga una lluvia de ideas sobre al menos 5 formas diferentes de evaluar las características típicas de retraso de un grupo de vuelos. Considerelos siguientes escenarios.
+select(flights_enminutos,dep_time_minutos,sched_dep_time_minutos)
+```
 
+**Desarrollo:** El formato en defecto de las categorias deploy time y scheduled deploy time se encuentran por defecto en formato de hora militar (24 horas), de modo que es sencillo intepretar el tiempo exacto, mas no una cantidad cuantificable de expresar dicho dato, se emplea en el caso la asignacion de flights_enminutos la creacion de una nueva variable llamada dep_time_minutos, donde se va separar el formato horario, con los operadores %/% (division aritmetica) y %%(modulo), donde se toma la categoria de horas y es convertida en minutos, y el remanente de minutos en la funcion, es adicionado a la conversion realizada anteriormente, es importante anotar la presencia de la condicion de conteo de minutos desde la medianoche, donde si llegase a ser el caso, la hora de salida fuese a las 24 horas, no deberia establecerse como 1440 minutos, como 0 correspondientemente , mediante el operador mod, limitara el dato, si llega a ser igual, tendra el cuenta dicha condicion, respetandola en las variables deploy time y scheduled deploy time
+
+***Item 2:*** Compare el tiempo en el aire con el tiempo de llegada y el tiempo de despegue, Que se espera observar, que se muestra, y que se requiere arreglar?
+
+```{r}
+library(dplyr)
+library(nycflights13)
+
+flights_comparacionreal <- mutate(flights,arr_time=((arr_time %/% 100*60)+(arr_time %%100))
+%%1440,dep_time=((dep_time %/% 100*60)+(dep_time %%100))%%1440,difference=arr_time-dep_time,comparation=air_time-difference)
+                                 
+head(flights_comparacionreal)
+View(flights_comparacionreal)
+
+```
+
+**Desarrollo:** En el rango de datos flights, se puede deducir que el tiempo en el aire, es igual a la diferencia entre el tiempo de despegue y el tiempo de llegada, por los que se puede concluir que si se desea ver idealmente el resultado sea cero, este no es el caso para este arreglo de datos donde entran factores como el tiempo de retraso de despegue y llegada, por lo que sera comun observar diferencias de valores negativos, aspecto que en primera instancia se suele ver, para realizar la codificacion, se implementa nuevamente una conversion de formato horario en 24 horas a minutos, para realizar la diferencia entre los valores dados como en el anterior item, se crean las nuevas variables la reasignacion de arr_time y dep_time, junto con la categoria difference, que es la resta entre arr_time y dep_time, y la diferencia entre el tiempo de vuelo y la resta anterior en la variable comparation, se puede llegar a solucionar esto, tomando en cuenta los factores externos, como lo son el tiempo de retraso de despegue y llegada, para esperar que la diferencia sea cero
+
+### 5.6.7 Ejercicios
+
+**1)** Haga una lluvia de ideas sobre al menos 5 formas diferentes de evaluar las características típicas de retraso de un grupo de vuelos. Considerelos siguientes escenarios.
 
 ***Item 1:*** Un vuelo llega 15 minutos antes el 50% del tiempo y 15 minutos tarde el 50% del tiempo.
 
 -Vuelos con llegada 15 minutos antes
-
 
 ```{r echo=TRUE,warning=FALSE}
 library(knitr)
@@ -328,27 +435,21 @@ ANTES <- myData%>%
 #kable(head(ANTES))
 ```
 
-
 -Vuelos con llegada 15 minutos despues
-
 
 ```{r echo=TRUE,warning=FALSE}
 DESPUES <- myData%>% 
   filter (arr_delay== 15)
 ```
 
-
 -tiempo de vuelo de 30 minutos
-
 
 ```{r echo=TRUE,warning=FALSE}
 MITAD_TIEMPO <- myData%>% 
   filter (air_time<=30)
 ```
 
-
 -combinacion 15 minutos antes de llegada con 30 minutos de vuelo
-
 
 ```{r echo=TRUE,warning=FALSE}
 ANTES_MITAD_TIEMPO<- myData%>% 
@@ -359,7 +460,6 @@ kable(head(ANTES_MITAD_TIEMPO))
 
 -combinacion 15 minutos despues de llegada con 30 minutos de vuelo
 
-
 ```{r echo=TRUE,warning=FALSE}
 DESPUES_MITAD_TIEMPO<- myData%>% 
   select( carrier,flight, tailnum, origin , dest,arr_delay,air_time)%>%
@@ -367,47 +467,37 @@ DESPUES_MITAD_TIEMPO<- myData%>%
 kable(head(DESPUES_MITAD_TIEMPO))
 ```
 
- 
 ***Item 2:*** Un vuelo siempre llega 10 minutos tarde.
-
 
 ```{r echo=TRUE,warning=FALSE}
 SIEMPRE_TARDE <- myData%>% 
   filter (arr_delay== 10)
 ```
 
-
 ***Item 3:*** Un vuelo llega 30 minutos antes el 50% del tiempo y 30 minutos tarde el 50% del tiempo.
 
 -Vuelos con llegada 30 minutos antes
-
 
 ```{r echo=TRUE,warning=FALSE}
 ANTES_30 <- myData%>% 
   filter (arr_delay== (-30))
 ```
 
-
 -Vuelos con llegada 30 minutos despues
-
 
 ```{r echo=TRUE,warning=FALSE}
 DESPUES_30 <- myData%>% 
   filter (arr_delay== 30)
 ```
 
-
 -tiempo de vuelo de 60 minutos
-
 
 ```{r echo=TRUE,warning=FALSE}
 MITAD_TIEMPO_60 <- myData%>% 
   filter (air_time<=60)
 ```
 
-
 -combinacion 30 minutos antes de llegada con 60 minutos de vuelo
-
 
 ```{r echo=TRUE,warning=FALSE}
 ANTES_MITAD_30_TIEMPO_60<- myData%>% 
@@ -416,9 +506,7 @@ ANTES_MITAD_30_TIEMPO_60<- myData%>%
   kable(head(ANTES_MITAD_30_TIEMPO_60))
 ```
 
-
 -combinacion 30 minutos despues de llegada con 60 minutos de vuelo
-
 
 ```{r echo=TRUE,warning=FALSE}
 DESPUES_MITAD_30_TIEMPO_60<- myData%>% 
@@ -427,37 +515,29 @@ DESPUES_MITAD_30_TIEMPO_60<- myData%>%
   kable(head(DESPUES_MITAD_30_TIEMPO_60))
 ```
 
-
 ***Item 4:*** El 99% de las veces un vuelo es puntual. El 1% de las veces llega 2 horas tarde.
 
     -vuelos puntuales aproximadamente el 99% del total menos a 120 min
-
 
 ```{r echo=TRUE,warning=FALSE }
 PUNTUAL <- myData %>% 
   filter(arr_delay< 120)
 ```
 
-
 -vuelos que llegan 2 horas o mas tarde aproximadamente El 1% ddel total
-
 
 ```{r echo=TRUE,warning=FALSE }
 DOS_HORAS_TARDE <- myData %>% 
   filter(arr_delay>= 120)
 ```
 
-
 ### ¿Qué es más importante: el retraso en la llegada o el retraso en la salida?
 
 Consideramos que si sabemos la hora de salida del vuelo y hay un retraso de llegada según la hora programada puede generar incertidumbre ya que pudo haber pasado algo en el vuelo o en la logística de trasporte aéreo. Si embargo un retraso en la salida genera molestias para el usuario, pero no hay inseguridad para él, por tal motivo es más importante el retraso en la llegada que en la salida en termino de seguridad para quien usan el servicio y sus servidores.
 
-
-
 ### 5.7.1 Ejercicio
 
-
-**2)**  ¿Qué avión (tailnum) tiene el peor récord de puntualidad?
+**2)** ¿Qué avión (tailnum) tiene el peor récord de puntualidad?
 
 ```{r echo=TRUE,warning=FALSE }
 RECORD_INPUNTUAL <- myData %>% 
